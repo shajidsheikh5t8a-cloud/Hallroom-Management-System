@@ -1,0 +1,125 @@
+import java.util.Scanner; 
+
+abstract class Room { 
+    protected int roomNumber; 
+    protected boolean isAvailable; 
+
+    public Room(int roomNumber) { 
+        this.roomNumber = roomNumber; 
+        this.isAvailable = true; 
+    } 
+
+    public abstract void bookRoom(); 
+    public abstract void cancelBooking(); 
+
+    public void checkAvailability() { 
+        if (isAvailable) { 
+            System.out.println("Room " + roomNumber + " is available."); 
+        } else { 
+            System.out.println("Room " + roomNumber + " is not available."); 
+        } 
+    } 
+} 
+
+interface RoomFeatures { 
+    void cleanRoom(); 
+} 
+
+class HallRoom extends Room implements RoomFeatures { 
+    public HallRoom(int roomNumber) { 
+        super(roomNumber); 
+    } 
+
+    @Override 
+    public void bookRoom() { 
+        if (isAvailable) { 
+            isAvailable = false; 
+            System.out.println("Room " + roomNumber + " booked successfully."); 
+        } else { 
+            System.out.println("Room " + roomNumber + " is already booked."); 
+        } 
+    } 
+
+    @Override 
+    public void cancelBooking() { 
+        if (!isAvailable) { 
+            isAvailable = true; 
+            System.out.println("Booking for room " + roomNumber + " canceled successfully."); 
+        } else { 
+            System.out.println("Room " + roomNumber + " is not booked."); 
+        } 
+    } 
+
+    @Override 
+    public void cleanRoom() { 
+        System.out.println("Room " + roomNumber + " has been cleaned."); 
+    } 
+} 
+
+public class Main { 
+    public static void main(String[] args) { 
+        Scanner scanner = new Scanner(System.in); 
+        Room[] rooms = new HallRoom[5]; 
+
+        for (int i = 0; i < 5; i++) { 
+            rooms[i] = new HallRoom(i + 1); 
+        } 
+
+        while (true) { 
+            System.out.println("\n=== Hall Room Management System ==="); 
+            System.out.println("1. Check Room Availability"); 
+            System.out.println("2. Book a Room"); 
+            System.out.println("3. Cancel Booking"); 
+            System.out.println("4. Clean a Room"); 
+            System.out.println("5. Exit"); 
+            System.out.print("Choose an option: "); 
+            
+            int choice = scanner.nextInt(); 
+            
+            switch (choice) { 
+                case 1: 
+                    System.out.print("Enter room number (1-5): "); 
+                    int roomCheck = scanner.nextInt(); 
+                    if (roomCheck >= 1 && roomCheck <= 5) { 
+                        rooms[roomCheck - 1].checkAvailability(); 
+                    } else { 
+                        System.out.println("Invalid room number."); 
+                    } 
+                    break; 
+                case 2: 
+                    System.out.print("Enter room number (1-5): "); 
+                    int roomBook = scanner.nextInt(); 
+                    if (roomBook >= 1 && roomBook <= 5) { 
+                        rooms[roomBook - 1].bookRoom(); 
+                    } else { 
+                        System.out.println("Invalid room number."); 
+                    } 
+                    break; 
+                case 3: 
+                    System.out.print("Enter room number (1-5): "); 
+                    int roomCancel = scanner.nextInt(); 
+                    if (roomCancel >= 1 && roomCancel <= 5) { 
+                        rooms[roomCancel - 1].cancelBooking(); 
+                    } else { 
+                        System.out.println("Invalid room number."); 
+                    } 
+                    break; 
+                case 4: 
+                    System.out.print("Enter room number (1-5): "); 
+                    int roomClean = scanner.nextInt(); 
+                    if (roomClean >= 1 && roomClean <= 5) { 
+                        ((HallRoom) rooms[roomClean - 1]).cleanRoom(); 
+                    } else { 
+                        System.out.println("Invalid room number."); 
+                    } 
+                    break; 
+                case 5: 
+                    System.out.println("Exiting program."); 
+                    scanner.close(); 
+                    return; 
+                default: 
+                    System.out.println("Invalid choice. Try again."); 
+            } 
+        } 
+    } 
+}
